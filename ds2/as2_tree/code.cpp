@@ -60,7 +60,7 @@ class TreeNode {
 
 class Tree {
 	TreeNode *root;
-	Stack *stack;
+        Stack *stack;
 public:
 	Tree() {
 		root = new TreeNode;
@@ -121,6 +121,10 @@ public:
 					}
 				}
 
+
+                                TreeNode* stackTop() {
+                                        return myStack[top];
+                                }
 
 				cout<<"\n Do you want to insert more? 'y' or 'n'";
 				cin>>myChoice;
@@ -204,7 +208,50 @@ public:
 			temp=temp->right;
 		}
 	}
-/*
+
+
+        void createTreeR() {
+            root = new TreeNode;
+            cout<<"Enter new data";
+            cin>>root->data;
+            root->left=root->right=NULL;
+
+            //calling recursive creation
+            createTreeR(root);
+        }
+
+        void createTreeR(TreeNode *root) {
+            char choice;
+
+            cout<<root->data<<"\n Want new value for left? 'y' ";
+            cin>>choice;
+
+            if(choice == 'y') {
+                TreeNode *temp;
+                temp = new TreeNode;
+                cout<<"\n Enter new data";
+                cin>>temp->data;
+                temp->left = temp->right = NULL;
+                root->left = temp;
+                createTreeR(temp);
+            }
+
+            cout<<root->data<<"\n Want new value for right? 'y'";
+            cin>>choice;
+
+            if(choice == 'y') {
+                TreeNode *temp;
+                temp = new TreeNode;
+                cout<<"\n Enter new data";
+                cin>>temp->data;
+                temp->left = temp->left = NULL;
+                root->right = temp;
+                createTreeR(temp);
+            }
+
+        }
+
+
 	void displayPostorderNR() {
 		TreeNode *temp = root;
 		stack = new Stack;
@@ -219,14 +266,10 @@ public:
 				cout<<" "<<temp->data<<" ";
 			}
 
-			while(stack->stackTop()->right == temp) {
-				if(stack->isEmpty()) {
-					break;
-				}
-				else {
-					temp = stack->pop();
-					cout<<""<<temp->data<<" ";
-				}
+                        while(!stack->isEmpty() && stack->stackTop()->right == temp) {
+                            temp = stack->pop();
+                            cout<<" "<<temp->data<<" ";
+
 			}
 
 			if(stack->isEmpty()) break;
@@ -234,46 +277,44 @@ public:
 			temp=stack->stackTop()->right;
 		}
 	}
-*/
+
 	
 };
 
 int main() {
 		Tree myTree = Tree();
 		int choice=0;
-		/*
+
 		do {
-			cout<<"What you want to do?\n 1.CreateTreeNonRecurive\n 2.DisplayTreeInorderRecursive\n";
-			cout<<"3.DisplayTreePreorderRecursive\n 4.DisplayTreePostorderRecursive\n 5.Exit";
+                        cout<<"What you want to do?\n 1.CreateTreeNonRecurive\n 2.CreateTreeRecursive \n 3.TreeInorderRecursive\n";
+                        cout<<"4.DisplayTreePreorderRecursive\n 5.DisplayTreePostorderRecursive\n "
+                              "6.DisplayTreeInorderNonRecursive 7.DisplayTreePreorderNonRecursive 8.DisplayTreePostorderNonRecursive ";
 			cin>>choice;
 
-			switch(choice) {
-				case 1:
-					myTree.createTreeNR();
-					break;
-				case 2:
-					myTree.displayInorderR();
-					break;
-				case 3:
-					myTree.displayPreorderR();
-					break;
-				case 4:
-					myTree.displayPostorderR();
-					break;
-				case 5:
-					cout<<"\nThis is exit";
-					break;
-				default:
-					cout<<"\n Wrong choice";
+                        switch(choice) {
+                        case 1:
+                                    myTree.createTreeNR();
+                                    break;
+                            case 2:
+                                    myTree.createTreeR();
+                        break;
+                            case 3:
+                                    myTree.displayInorderR();
+                                    break;
+                            case 4:
+                                    myTree.displayPreorderR();
+                                    break;
+                            case 5:
+                                    myTree.displayPostorderR();
+                                    break;
+                            case 6:
+                            default:
+                                    cout<<"\n Wrong choice";
 			}
 
-		}while(choice<5);*/
+                }while(choice<5);
 
-		myTree.createTreeNR();
-		//myTree.displayInorderR();
-		//myTree.displayInorderNR();
-		//myTree.displayPreorderNR();
-		myTree.displayPostorderNR();
 		return 0;
 
 }
+
