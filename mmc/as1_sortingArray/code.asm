@@ -1,86 +1,78 @@
-%macro rw 4
-mov rax,%1
-mov rdi,%2
-mov rsi,%3
-mov rdx,%4
-syscall
-%endmacro
+section .data						;data section
+arr1 db 9bh,03h,05h,35h,50h		;source array
 
-section .data
-divisor dd 5.0
-arr dd 12.32,15.66,33.12,45.43,76.34
-mean dt 0.0
-mult dd 10000.0
-count1 db 10
-count2 db 2
-mydot db '.'
 
-section .bss
-temp resb 1
+section .bss						;dynamic section
+arr2 resb 15						;destination array
 
-section .text
+section .text						;coding section
 global _start
 _start:
 
-;initializing array and counter
-mov cl,5
-mov esi,arr
-;loading stack
-FLDZ
+									; logic for sorting the array
+mov ch,05h						;doing it by bubble sort
+outer:								; outer bubble sort loop
+mov esi,arr1
+mov cl,04h
 
-;addition of elements
-addnext:
-FADD dword[esi]
-add esi,4
-dec cl
-jnz addnext
-
-;dividing with top stack, i.e. sum with 5
-FDIV dword[divisor]
-
-FMUL dword[mult]
-
-;getting the mean
-FBSTP tword[mean]
-
-mov rbp,mean
-add rbp,9h
-
-upmain:
-mov bh,byte[rbp]
-mov byte[count2],2
-cmp byte[count1],2
- 
-jne notdot
-rw 1,1,mydot,1
-notdot:
-up:
-rol bh,4
-mov bl,bh
-
-and bh,0Fh
-
-cmp bh,09h
+inner :								; inner bubble sort loop
+mov al,byte[esi]
+cmp al,byte[esi+1]
 jbe down
-add bh,07h
+
+xchg al,byte[esi+1]
+mov byte[esi],al
 down:
-add bh,30h
+inc esi
+dec cl
+jnz inner
 
-mov byte[temp],bh
-rw 1,1,temp,1
-
-mov bh,bl
-dec byte[count2]
-jnz up
+dec ch
+jnz outer
 
 
-dec rbp
-dec byte[count1]
+mov esi,arr1						;logic for unpacking the values
+mov edi,arr2
 
-jnz upmain
 
-mov rax,60
-mov rdx,0
+mov bh,05
+
+ott:								; lopping through the next value in array
+mov al,byte[esi]
+mov cx,02
+
+inn:								; checking the next digit in the array
+rol al,4h
+mov bl,al
+and al,0fh
+cmp al,09h
+jbe greater
+add al,07h
+greater:
+add al,30h
+mov byte[edi],al
+inc edi
+mov al,bl
+dec cx
+jnz inn
+
+mov byte[edi],20h
+inc esi
+inc edi
+dec bh
+jnz ott
+
+
+
+mov rax,1						; displaying the data
+mov rdi,1
+mov rsi,arr2
+mov rdx,15
 syscall
+
+mov rax,60					;ending the program
+mov rdi,0
+syscall
+
 
 
