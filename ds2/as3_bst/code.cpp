@@ -21,9 +21,7 @@ public:
   }
 
   TreeNode* deleteQueue() {
-    TreeNode* temp = q[front];
-    front+=1;
-    return temp;
+    return q[++front];
   }
 
   int isEmpty() {
@@ -56,47 +54,37 @@ public:
   void createBTree() {
     TreeNode *temp,*newNode;
     char choice = 'y';
-    int flag;
+    int flag=1;
     do {
       if(root == NULL) {
         root = new TreeNode;
         cout<<"\nEnter root data ";
-        cout<<"Enter keyword and meaning";
         cin>>root->word>>root->meaning;
         root->left = root->right = NULL;
       } else {
-        flag=0;
-        temp = root;
-
-        cout<<"Enter new node-";
+        cout<<"Enter new node- ";
+        newNode = new TreeNode;
         cin>>newNode->word>>newNode->meaning;
-        newNode->left=newNode->right = NULL;
+        newNode->left = NULL;
+        newNode->right = NULL;
 
-        while(flag==0) {
-          if(strcmp(temp->word,newNode->word) >= 0) {
-            if(temp->left == NULL) {
-              temp->left = newNode;
-              flag=1;
-              temp = temp->left;
-              break;
-            } else {
-              flag=0;
-              temp = temp->left;
-            }
-          } else {
+        temp = root;
+        flag=1;
+
+        while(flag) {
+          if(strcmp(temp->word,newNode->word) < 0) {
             if(temp->right == NULL) {
               temp->right = newNode;
-              flag=1;
-              temp = temp->right;
-              break;
-            } else {
               flag=0;
-              temp = temp->right;
             }
+            temp = temp->right;
+          } else {
+            if(temp->left == NULL) {
+              temp->left = newNode;
+              flag=0;
+            }
+            temp = temp->left;
           }
-
-          if(flag==1) break;
-
         }
       }
       cout<<"Want to insert more?";
@@ -108,16 +96,15 @@ public:
   void displayBTreeBFS() {
     Queue q;
     TreeNode *temp;
-
+    temp = new TreeNode;
     temp = root;
 
     q.insertQueue(root);
 
-
     while(!q.isEmpty()) {
       temp = q.deleteQueue();
 
-      cout<<" "<<temp->word<<temp->meaning;
+      cout<<" "<<temp->word<<" "<<temp->meaning;
       cout<<"\n";
 
       if(temp->left !=NULL) {
@@ -127,21 +114,43 @@ public:
       if(temp->right !=NULL) {
         q.insertQueue(temp->right);
       }
-
     }
   }
 
-  void displayInorderR() {
-    displayInorderR(root);
-    cout<<endl;
+  void insertNode() {
+    TreeNode *temp = root;
+    TreeNode *newNode = new TreeNode;
+
+    cout<<"\n Enter new node to insert";
+    cin>>newNode->word>>newNode->meaning;
+
+    int flag=1;
+    while(flag) {
+      if(strcmp(temp->word,newNode->word) < 0) {
+        if(temp->right == NULL) {
+          temp->right = newNode;
+          flag=0;
+        }
+        temp = temp->right;
+      } else {
+        if(temp->left == NULL) {
+          temp->left = newNode;
+          flag=0;
+        }
+        temp=temp->left;
+      }
+    }
   }
 
-  void displayInorderR(TreeNode* temp) {
-    if(temp!=NULL) {
-      displayInorderR(temp->left);
-      cout<<" "<<temp->word;
-      displayInorderR(temp->right);
-    }
+  BTree* mirrorR() {
+    return mirrorR(root);
+  }
+
+  BTree* mirrorR(TreeNode *temp) {
+    BTree *mirror;
+    mirror = new BTree;
+
+    
   }
 };
 
@@ -151,8 +160,8 @@ int main() {
   BTree *BST;
   BST = new BTree;
   BST->createBTree();
+  BST->displayBTreeBFS();
+  //BST->insertNode();
   //BST->displayBTreeBFS();
-  BST->displayInorderR();
-
   return 0;
 }
