@@ -142,15 +142,22 @@ public:
     }
   }
 
-  BTree* mirrorR() {
-    return mirrorR(root);
+  void mirrorR() {
+    TreeNode *temp = root;
+    mirrorR(temp);
   }
 
-  BTree* mirrorR(TreeNode *temp) {
-    BTree *mirror;
-    mirror = new BTree;
+  void mirrorR(TreeNode *temp) {
+    if(temp != NULL) {
+      if(temp->left != NULL) {
+        mirrorR(temp->right);
+      }
+      //cout<<temp->word;
 
-    
+      if(temp->right != NULL) {
+        mirrorR(temp->left);
+      }
+    }
   }
 };
 
@@ -163,5 +170,6 @@ int main() {
   BST->displayBTreeBFS();
   //BST->insertNode();
   //BST->displayBTreeBFS();
+  BST->mirrorR();
   return 0;
 }
