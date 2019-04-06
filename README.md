@@ -13,6 +13,8 @@
 
 ## Operating Systems (.sh)
 1. Basic operations, Arithmetic operations
+2. Creating subprocess (fork()) call
 
 ## Software Engg. and Project Management
 1. Software Requirements Specifications
+2. DataFlow diagram and ControlFlow diagram 
