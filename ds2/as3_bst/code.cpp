@@ -117,6 +117,12 @@ public:
     }
   }
 
+  void insertNode(TreeNode* val) {
+    if(root == NULL) {
+      root = val;
+    }
+  }
+
   void insertNode() {
     TreeNode *temp = root;
     TreeNode *newNode = new TreeNode;
@@ -142,34 +148,91 @@ public:
     }
   }
 
-  void mirrorR() {
+  TreeNode* mirrorR() {
     TreeNode *temp = root;
-    mirrorR(temp);
+    TreeNode *newRoot = new TreeNode;
+    newRoot = mirrorR(temp);
+    return newRoot;
   }
 
-  void mirrorR(TreeNode *temp) {
-    if(temp != NULL) {
-      if(temp->left != NULL) {
-        mirrorR(temp->right);
-      }
-      //cout<<temp->word;
+  TreeNode* mirrorR(TreeNode *temp) {
 
-      if(temp->right != NULL) {
-        mirrorR(temp->left);
+    if(temp != NULL) {
+      TreeNode* newNode = new TreeNode;
+      strcpy(newNode->word,temp->word);
+      strcpy(newNode->meaning, temp->meaning);
+      newNode->left = mirrorR(temp->right);
+      newNode->right = mirrorR(temp->left);
+      return newNode;
+
+    } else {
+      return NULL;
+    }
+  }
+
+  TreeNode* searchElement(string key) {
+    TreeNode* temp = new TreeNode;
+    temp = searchElement(key, root);
+    return temp;
+  }
+
+  TreeNode* searchElement(string key, TreeNode *root) {
+    if(root->word == key) {
+      return root;
+    } else {
+      if(root->left != NULL) {
+        return searchElement(key,root->left);
+      } else if(root->right != NULL){
+        return searchElement(key,root->right);
+      } else {
+        return NULL;
       }
     }
   }
+
+  TreeNode* minValue(TreeNode *root) {
+    TreeNode* temp = root;
+    while(temp->left != NULL) {
+      temp = temp->left;
+    }
+    return temp;
+  }
+
+  TreeNode* deleteKeyword(string key) {
+    return deleteKeyword(key, root);
+  }
+
+  TreeNode* deleteKeyword(string key, TreeNode* root) {
+    if(root == NULL) return root;
+
+    if(key < root->word) {
+      root->left = deleteKeyword(key,root->left);
+    } else if(key > root->word) {
+      root->right = deleteKeyword(key, root->right);
+    } else {
+      if(root->left == NULL) {
+        TreeNode* temp = root->right;
+        delete root;
+        return temp;
+      } else if(root->right == NULL) {
+        TreeNode* temp = root->left;
+      }
+
+      TreeNode* temp = minValue(root->right);
+
+      strcpy(root->word,temp->word);
+
+      root->right = deleteKeyword(key, root->right);
+    }
+    return root;
+  }
 };
-
-
 
 int main() {
   BTree *BST;
   BST = new BTree;
+
   BST->createBTree();
   BST->displayBTreeBFS();
-  //BST->insertNode();
-  //BST->displayBTreeBFS();
-  BST->mirrorR();
   return 0;
 }
