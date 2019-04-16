@@ -33,6 +33,14 @@ public:
     if(rear == 19) return 1;
     else return 0;
   }
+
+  int sizeofQueue() {
+    int count=0;
+    for(int i=front; i<=rear; i++) {
+      count++;
+    }
+    return count;
+  }
 };
 
 class TreeNode {
@@ -95,6 +103,7 @@ public:
 
   void displayBTreeBFS() {
     Queue q;
+    int count;
     TreeNode *temp;
     temp = new TreeNode;
     temp = root;
@@ -102,18 +111,24 @@ public:
     q.insertQueue(root);
 
     while(!q.isEmpty()) {
-      temp = q.deleteQueue();
 
-      cout<<" "<<temp->word<<" "<<temp->meaning;
+      cout<<count<<" ";
+      temp = q.deleteQueue();
+      count = q.sizeofQueue();
+
+      while(count--) {
+        cout<<" "<<temp->word<<" "<<temp->meaning;
+
+        if(temp->left !=NULL) {
+          q.insertQueue(temp->left);
+        }
+
+        if(temp->right !=NULL) {
+          q.insertQueue(temp->right);
+        }
+      }
       cout<<"\n";
 
-      if(temp->left !=NULL) {
-        q.insertQueue(temp->left);
-      }
-
-      if(temp->right !=NULL) {
-        q.insertQueue(temp->right);
-      }
     }
   }
 
