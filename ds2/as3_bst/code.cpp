@@ -113,7 +113,7 @@ public:
         if(q.returnFront() != NULL)
           q.insertQueue(NULL);
       } else {
-        cout<<temp->word<<" "<<temp->meaning<<"";
+        cout<<temp->word<<" "<<temp->meaning<<"\t";
 
         if(temp->left !=NULL) {
           q.insertQueue(temp->left);
@@ -226,6 +226,8 @@ public:
         return temp;
       } else if(root->right == NULL) {
         TreeNode* temp = root->left;
+        delete root;
+        return temp;
       }
 
       TreeNode* temp = minValue(root->right);
@@ -243,6 +245,8 @@ int main() {
   BST = new BTree;
 
   BST->createBTree();
+  BST->displayBTreeBFS();
+  BST->deleteKeyword("b");
   BST->displayBTreeBFS();
   return 0;
 }
