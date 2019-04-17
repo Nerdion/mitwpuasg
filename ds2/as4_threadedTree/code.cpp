@@ -2,12 +2,11 @@
 using namespace std;
 
 class tTreeNode {
+  int data;
   bool lbit, rbit;
   tTreeNode *left, *right;
-  int data;
   friend class ThreadedTree;
 };
-
 
 class ThreadedTree {
   tTreeNode* head;
@@ -28,35 +27,35 @@ public:
     cout<<"\n Enter root data";
     cin>>root->data;
     head->lbit = 1;
-    head->left = root;  
+    head->left = root;
     root->left = root->right = head;
     root->lbit = root->rbit = 0;
 
     do {
+      temp = root;
       bool flag = 1;
       curr = new tTreeNode;
-      temp = root;
       cout<<"\n Enter data- ";
       cin>>curr->data;
+      curr->lbit = curr->rbit = 0;
 
       while(flag) {
         cout<<"Where u want to inset? l or r";
         cin>>side;
-        curr->lbit = curr->rbit = 0;
 
-        if(side = 'l') {
+        if(side == 'l') {
           if(temp->lbit == 0) {
             curr->left = temp->left;
-            temp->left = curr;
             temp->lbit = 1;
+            temp->left = curr;
             flag = 0;
           }
           temp = temp->left;
-        } else if(side = 'r') {
+        } else if(side == 'r') {
           if(temp->rbit == 0) {
             curr->right = temp->right;
-            temp->right = curr;
             temp->rbit = 1;
+            temp->right = curr;
             flag = 0;
           }
           temp = temp->right;
@@ -69,20 +68,18 @@ public:
   }
 
   tTreeNode* insucc(tTreeNode *temp) {
-    tTreeNode *x;
-    x = new tTreeNode;
-    x = temp->right;
-    if(temp->rbit == 1) {
-      while(x->lbit == 1) {
-        x = x->left;
-      }
-      return x;
+    tTreeNode *x = new tTreeNode;
+    if(temp == NULL) return NULL;
+
+    while(temp->lbit == 1) {
+      temp = temp->left;
     }
+
+    return temp;
   }
 
   void inorderTraversal() {
     tTreeNode *temp;
-    temp = new tTreeNode;
     temp = head;
 
     while(1) {
@@ -100,4 +97,3 @@ int main(void) {
     t.inorderTraversal();
     return 0;
 }
-

@@ -110,8 +110,7 @@ public:
 
       if(temp == NULL) {
         cout<<"\n";
-        if(q.returnFront() != NULL)
-          q.insertQueue(NULL);
+        q.insertQueue(NULL);
       } else {
         cout<<temp->word<<" "<<temp->meaning<<"\t";
 
@@ -127,19 +126,8 @@ public:
     cout<<"\n";
   }
 
-  void insertNode(TreeNode* val) {
-    if(root == NULL) {
-      root = val;
-    }
-  }
-
-  void insertNode() {
+  void insertNode(TreeNode* newNode) {
     TreeNode *temp = root;
-    TreeNode *newNode = new TreeNode;
-
-    cout<<"\n Enter new node to insert";
-    cin>>newNode->word>>newNode->meaning;
-
     int flag=1;
     while(flag) {
       if(strcmp(temp->word,newNode->word) < 0) {
@@ -158,95 +146,102 @@ public:
     }
   }
 
-  TreeNode* mirrorR() {
-    TreeNode *temp = root;
-    TreeNode *newRoot = new TreeNode;
-    newRoot = mirrorR(temp);
-    return newRoot;
+  void mirrorR() {
+    mirrorR(root);
   }
 
-  TreeNode* mirrorR(TreeNode *temp) {
+  void mirrorR(TreeNode *root) {
+    if(root != NULL) {
+      TreeNode* temp = new TreeNode;
+      mirrorR(root->right);
+      mirrorR(root->left);
 
-    if(temp != NULL) {
-      TreeNode* newNode = new TreeNode;
-      strcpy(newNode->word,temp->word);
-      strcpy(newNode->meaning, temp->meaning);
-      newNode->left = mirrorR(temp->right);
-      newNode->right = mirrorR(temp->left);
-      return newNode;
-
+      temp = root->left;
+      root->left = root->right;
+      root->right = temp;
     } else {
-      return NULL;
+      return;
     }
   }
 
-  TreeNode* searchElement(string key) {
-    TreeNode* temp = new TreeNode;
-    temp = searchElement(key, root);
+
+  TreeNode* deleteKeyword(char* key) {
+    TreeNode* temp = deleteKeyword(key, root);
     return temp;
   }
 
-  TreeNode* searchElement(string key, TreeNode *root) {
-    if(root->word == key) {
-      return root;
-    } else {
-      if(root->left != NULL) {
-        return searchElement(key,root->left);
-      } else if(root->right != NULL){
-        return searchElement(key,root->right);
-      } else {
-        return NULL;
-      }
-    }
-  }
-
-  TreeNode* minValue(TreeNode *root) {
-    TreeNode* temp = root;
-    while(temp->left != NULL) {
-      temp = temp->left;
-    }
-    return temp;
-  }
-
-  TreeNode* deleteKeyword(string key) {
-    return deleteKeyword(key, root);
-  }
-
-  TreeNode* deleteKeyword(string key, TreeNode* root) {
+  TreeNode* deleteKeyword(char* key, TreeNode* root) {
     if(root == NULL) return root;
 
-    if(key < root->word) {
+    if(strcmp(root->word,key) > 0) {
       root->left = deleteKeyword(key,root->left);
-    } else if(key > root->word) {
+    } else if(strcmp(root->word,key) < 0) {
       root->right = deleteKeyword(key, root->right);
     } else {
       if(root->left == NULL) {
-        TreeNode* temp = root->right;
+        TreeNode *temp = root->right;
         delete root;
         return temp;
       } else if(root->right == NULL) {
-        TreeNode* temp = root->left;
+        TreeNode *temp = root->left;
         delete root;
         return temp;
       }
 
-      TreeNode* temp = minValue(root->right);
+      TreeNode *succParent = root->right;
+      // Find succ
+      TreeNode *succ = root->right;
+      while(succ->left != NULL) {
+        succParent = succ;
+        succ = succ->left;
+      }
 
-      strcpy(root->word,temp->word);
+      succParent->left = succ->right;
 
-      root->right = deleteKeyword(key, root->right);
+      //copy succ data to root
+      strcpy(root->word,succ->word);
+      strcpy(root->meaning,succ->meaning);
+      succ->left = succ->right = NULL;
+      delete succ;
+      root->right = deleteKeyword(succ->word,root->right);
+      return root;
     }
-    return root;
+    return NULL;
   }
 };
 
 int main() {
-  BTree *BST;
-  BST = new BTree;
+  BTree *BST, *BST2;
+  TreeNode *newNode, *temp1, *temp2;
+  int choice;
 
-  BST->createBTree();
-  BST->displayBTreeBFS();
-  BST->deleteKeyword("b");
-  BST->displayBTreeBFS();
+  do {
+    cout<<"\n What? 1.Create 2.Display 3.Insert 4.Delete 5.Mirror 6.Copy- ";
+    cin>>choice;
+    switch (choice) {
+    case 1:
+      BST = new BTree;
+      BST->createBTree();
+      break;
+    case 2:
+      BST->displayBTreeBFS(); break;
+    case 3:
+      newNode = new TreeNode;
+      cout<<"\n Enter new node to insert";
+      cin>>newNode->word>>newNode->meaning;
+      BST->insertNode(newNode); break;
+    case 4:
+      temp1 = new TreeNode;
+      char a[10];
+      cout<<"\n Enter value to delete-";
+      cin>>a;
+      temp1 = BST->deleteKeyword(a);
+      break;
+    case 5:
+      BST->mirrorR();
+      break;
+    }
+
+  }while(choice <= 5);
   return 0;
 }
