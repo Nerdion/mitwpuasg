@@ -6,6 +6,7 @@
 1. Polynomial Using Circular Linked List
 2. Binary Tree DFS
 3. Binary Search Tree
+4. Graph - friends on facebook - DFS,BFS
 
 ## Microprocessors and Microcontrollers (.asm)
 1. Sorting numbers
@@ -19,4 +20,5 @@
 
 ## Software Engg. and Project Management
 1. Software Requirements Specifications
-2. DataFlow diagram and ControlFlow diagram 
+2. DataFlow diagram and ControlFlow diagram
+3. Use case, class diagram, sequence diagram
