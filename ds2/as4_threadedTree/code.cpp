@@ -6,14 +6,14 @@ class node
 public:
 	node *left,*right;
 	int lbit,rbit,data;
-	friend class tbt;	
+	friend class tbt;
 };
 
 class tbt
 {
 node *head;
 public:
-	
+
 	tbt()
 	{
 		head->right=head;
@@ -34,7 +34,7 @@ void tbt::create()
 	char side,yn;
 
 	root=new node;
-	
+
 	cout<<"enter the data for the root"<<endl;
 	cin>>root->data;
 
@@ -44,7 +44,7 @@ void tbt::create()
 	root->left=root->right=head;
 	root->lbit=root->rbit=0;
 
-	
+
 
 	do
 	{
@@ -70,11 +70,11 @@ void tbt::create()
 					curr->lbit=curr->rbit=0;
 					curr->right=temp;
 					flag=1;
-						
+
 				}
 				temp=temp->left;
 			}
-		
+
 			if(side=='r')
 			{
 				if(temp->rbit==0)
@@ -86,7 +86,7 @@ void tbt::create()
 					curr->lbit=curr->rbit=0;
 					curr->left=temp;
 					flag=1;
-						
+
 				}
 				temp=temp->right;
 			}
@@ -106,12 +106,10 @@ node* tbt::insuc(node *temp)
 	x=new node;
 	x=temp->right;
 	if(temp->rbit==1)
-	
+
 		while(x->lbit==1)
-		
+
 			x=x->left;
-		
-	
 	return x;
 }
 
@@ -143,7 +141,7 @@ int main()
 OUTPUT:
 
 enter the data for the root
-4        
+4
 enter the data of node
 3
 press l to add node to left and r to right of 4l

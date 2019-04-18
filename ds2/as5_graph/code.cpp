@@ -3,13 +3,11 @@
 using namespace std;
 
 class Node {
-
     int vertex;
     string name;
     Node *next;
     friend class graph;
 };
-
 
 class Stack {
 	int myStack[10];
@@ -58,7 +56,6 @@ public:
     front=rear=-1;
   }
 
-
   void enQueue(int temp) {
     if(!isFull()) q[++rear] = temp;
   }
@@ -73,7 +70,7 @@ public:
   }
 
   int isFull() {
-    if(rear == 19) return 1;
+    if(rear < 20) return 1;
     else return 0;
   }
 
@@ -121,9 +118,9 @@ void graph::createGraph() {
         temp = head[i];
         while(ch) {
             curr = new Node;
-            cout<<"\n Enter friend vertex";
+            cout<<"\n Enter friend vertex- ";
             cin>>curr->vertex;
-            cout<<"\n Enter friend name";
+            cout<<"\n Enter friend name- ";
             cin>>curr->name;
             curr->next = NULL;
             
@@ -138,7 +135,7 @@ void graph::createGraph() {
 
 void graph::displayGraph() {
     Node *temp;
-    
+
     for(int i=0;i<n;i++) {
         temp = head[i];
         cout<<"\n-----------------------------\n";
@@ -153,8 +150,8 @@ void graph::displayGraph() {
 
 void graph::displayDFS() {
     int v,a[20];
-    
-    cout<<"\n Starting from which?";
+    cout<<"\n----  DFS-R DISPLAY ----";
+    cout<<"\n Starting from which? ";
     cin>>v;
     
     for(int i=0;i<n;i++)    a[i]=0;
@@ -175,58 +172,51 @@ void graph::displayDFS(int v, int a[20]) {
         temp = temp->next;
     }
 }
-/*
+
 void graph::dfsnr()
 {
-	Stack ss;
+	Stack s;
 	int v,i,w,ar[20];
-	 
-	for(i=0;i<n;i++)
-	{
-		ar[i]=0;
-	}
-	cout<<"\nenter the starting vertex\n";	
+
+	for(i=0;i<n;i++) ar[i]=0;
+  cout<<"\n----  DFS-NR DISPLAY ----";
+  cout<<"\n Starting from which? ";	
 	cin>>v;
 
-	node *curr=new node;
+	Node *curr=new node;
 	curr=head[v];
-	ss.push(v);
-	while(ss.isEmpty()!=1)
-	{
-		v=ss.topv();
-		if(ar[v]==0)
-		{
+	s.push(v);
+	
+  while(!s.isEmpty()) {
+		v=s.stackTop();
+		if(ar[v]==0) {
 			ar[v]=1;
 			cout<<v<<"->"<<curr->name<<endl;
 		}
+
 		curr=head[v]->next;
-		while(curr!=NULL)
-		{
+		while(curr!=NULL) {
 			w=curr->vertex;
-			if(ar[w]==0)
-			{
+			if(ar[w]==0) {
 				ss.push(w);
 				break;
 			}
 
-			if(curr->next==NULL)
-			{
+			if(curr->next==NULL) {
 				ss.pop();
-				
 			}
 			curr=curr->next;
 		}
 	}
 }
 
-*/
 void graph::displayBFS() {
 	Node *temp;
 	Queue q;
 	int a[20],v;
 
 	for(int i=0;i<n;i++) a[i]=0;
-
+  cout<<"\n----  BFS-NR DISPLAY ----";
 	cout<<"\n Starting from which?";
     cin>>v;
 
