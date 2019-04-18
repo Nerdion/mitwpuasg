@@ -3,6 +3,7 @@
 using namespace std;
 
 class Node {
+
     int vertex;
     string name;
     Node *next;
@@ -11,7 +12,7 @@ class Node {
 
 
 class Stack {
-	int *myStack[10];
+	int myStack[10];
 	int top;
 	
 	Stack() {
@@ -33,10 +34,6 @@ public:
 		return myStack[top];
 	}
 
-	int topIndex() {
-		return top;
-	}
-
 	//popping the top element of the stack
 	int pop() {
 			return myStack[top--];
@@ -54,7 +51,7 @@ public:
 };
 
 class Queue {
-  Node *q[20];
+  int q[20];
   int front,rear;
 public:
   Queue() {
@@ -62,11 +59,11 @@ public:
   }
 
 
-  void insertQueue(Node *temp) {
+  void enQueue(int temp) {
     if(!isFull()) q[++rear] = temp;
   }
 
-  Node* deleteQueue() {
+  int deQueue() {
     return q[++front];
   }
 
@@ -80,7 +77,7 @@ public:
     else return 0;
   }
 
-  Node* returnFront() {
+  int returnFront() {
     return q[front];
   }
 };
@@ -95,6 +92,7 @@ public:
     void displayDFS();
     void displayDFS(int v,int a[20]);
     void displayDFS_nr();
+	void displayBFS();
 };
 
 
@@ -177,19 +175,85 @@ void graph::displayDFS(int v, int a[20]) {
         temp = temp->next;
     }
 }
+/*
+void graph::dfsnr()
+{
+	Stack ss;
+	int v,i,w,ar[20];
+	 
+	for(i=0;i<n;i++)
+	{
+		ar[i]=0;
+	}
+	cout<<"\nenter the starting vertex\n";	
+	cin>>v;
 
-void graph::displayDFS_nr() {
-    Stack s;
-    int v,w,a[20];
-    
-    for(int i=0;i<n;i++) a[i]=0;
-    
-    cout<<"\n Starting from which?";
+	node *curr=new node;
+	curr=head[v];
+	ss.push(v);
+	while(ss.isEmpty()!=1)
+	{
+		v=ss.topv();
+		if(ar[v]==0)
+		{
+			ar[v]=1;
+			cout<<v<<"->"<<curr->name<<endl;
+		}
+		curr=head[v]->next;
+		while(curr!=NULL)
+		{
+			w=curr->vertex;
+			if(ar[w]==0)
+			{
+				ss.push(w);
+				break;
+			}
+
+			if(curr->next==NULL)
+			{
+				ss.pop();
+				
+			}
+			curr=curr->next;
+		}
+	}
+}
+
+*/
+void graph::displayBFS() {
+	Node *temp;
+	Queue q;
+	int a[20],v;
+
+	for(int i=0;i<n;i++) a[i]=0;
+
+	cout<<"\n Starting from which?";
     cin>>v;
-    
-    Node *curr = new Node;
-    curr = head[v];
-    s.push(v);
+
+
+	temp = head[v];
+	a[v] = 1;
+	q.enQueue(v);
+	
+	cout<<"\n-----------------------------\n";
+    cout<<"\t"<<temp->vertex<<" "<<temp->name;
+    cout<<"\n-----------------------------\n";
+
+	while(!q.isEmpty()) {
+		v = q.deQueue();
+		temp = head[v]->next;
+		while(temp!=NULL) {
+			if(a[temp->vertex] == 0) {
+				a[temp->vertex] = 1;
+				cout<<"\n-----------------------------\n";
+				cout<<"\t"<<temp->vertex<<" "<<temp->name;
+				cout<<"\n-----------------------------\n";
+				q.enQueue(temp->vertex);
+			}
+			temp = temp->next;
+		}
+	}
+
 }
 
 int main() {
@@ -198,4 +262,5 @@ int main() {
     g.displayGraph();
     cout<<endl<<endl;
     g.displayDFS();
+	g.displayBFS();
 }
