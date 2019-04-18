@@ -48,8 +48,8 @@ public:
 };
 
 class BTree {
-  TreeNode *root;
 public:
+  TreeNode *root;
   BTree() {
     root = NULL;
   }
@@ -208,11 +208,28 @@ public:
     }
     return NULL;
   }
+
+  void copyR(BTree *t) {
+    root = copyR(t->root);
+  }
+
+  TreeNode* copyR(TreeNode* root) {
+    TreeNode *temp = NULL;
+    if(root != NULL) {
+      temp = new TreeNode;
+      temp->left = temp->right = NULL;
+      strcpy(temp->word,root->word);
+      strcpy(temp->meaning,root->meaning);
+      temp->left = copyR(root->left);
+      temp->right = copyR(root->right);
+    }
+    return temp;
+  }
 };
 
 int main() {
   BTree *BST, *BST2;
-  TreeNode *newNode, *temp1, *temp2;
+  TreeNode *newNode, *temp1, *temp2, *temp;
   int choice;
 
   do {
@@ -240,8 +257,13 @@ int main() {
     case 5:
       BST->mirrorR();
       break;
+    case 6:
+      BST2= new BTree;
+      BST2->copyR(BST);
+      BST2->displayBTreeBFS();
+      break;
     }
 
-  }while(choice <= 5);
+  }while(choice <= 6);
   return 0;
 }
