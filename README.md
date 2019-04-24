@@ -13,6 +13,7 @@
 1. Sorting numbers
 2. Calculating mean out of array
 3. Loading the contents of GDTR,LDTR, IDTR, TR, MSW
+4. FIle handling
 
 ## Operating Systems (.sh) (.c)
 1. Basic operations, Arithmetic operations
