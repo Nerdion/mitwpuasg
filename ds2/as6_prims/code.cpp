@@ -1,73 +1,145 @@
+//solved
 #include<iostream>
-#define infi 9999
+#include<stdlib.h>
+#define MAX 10
+#define INF 9999
 using namespace std;
-
-class Prims {
-    int cost[20][20];
+class graph_prims
+{
+	int n;  // Total vertices
+	int cost[MAX][MAX]; // for creating cost matrix
 
 public:
-    Prims() {
-    }
-
-    Prims(int n) {
-        for(int i=0;i<n;i++) {
-            for(int j=i+1;i<n;i++) {
-                cost[i][j] = cost[j][i] = infi;
-            }
-        }
-    }
-
-    void create(int);
-    void primsFunction(int);
+	graph_prims()
+	{
+		cout<<"Enter total number of vertices\n";
+		cin>>n;  // Taking value of vertices from user
+		for(int i = 0; i< n; i++)
+		{
+			for(int j = 0; j< n; j++)
+			{
+				cost[i][j] = INF;
+			}
+		}
+	}
+	void create();
+	void display();
+	void prims();
 };
+void graph_prims:: create()
+{
+	int edges;
+	int start_vertex, end_vertex,cost_edge;
+	cout<<"Accept number of edges from the user\n";
+	cin>>edges;  // It accepts the total number of edges form the user
+	for(int i = 0; i < edges; i++)
+	{
+		cout<<"Enter start vertex ";
+		cin>>start_vertex;
+		cout<<"\nEnter end vertex ";
+		cin>>end_vertex;
+		cout<<"\nEnter cost of edge ";
+		cin>>cost_edge;
+		cout<<"\n";
+		cost[start_vertex][end_vertex] = cost[end_vertex][start_vertex] = cost_edge;
+	}
 
-void Prims::create(int n) {
-    int opt;
-
-    for(int i=0;i<n;i++) {
-        for(int j=i+1;j<n;j++) {
-            cout<<"\n Press 1. if there is connection in "<<i<<" "<<j;
-            cin>>opt;
-
-            if(opt == 1) {
-                cout<<"\n Then enter cost in place of "<<cost[i][j];
-                cin>>cost[i][j];
-                cost[i][j] = cost[j][i];
-            }
-        }
-    }
 }
-
-void Prims::primsFunction(int n) {
-    int min,near[20],k,t[20][20],mincost=0,m;
-
-    cout<<"\n Enter starting vertex- ";
-    cin>>k;
-
-    near[k] = -1;
-
-    for(int i=0;i<n;i++) {
-        if(i!=k) {
-            near[i] = k;
-        }
-    }
-
-    for(int i=0;i<n-1;i++) {
-        min = infi;
-
-        for(int j=0;j<n;j++) {
-            if(near[j]!=-1) {
-                if(cost[j][near[j]] < min) {
-                    min = cost[j][near[j]];
-                    k=j;
-                }
-            }
-
-            cout<<"\n Next office"<<k;
-        }
-    }
+void graph_prims:: display()
+{
+	for(int i = 0; i< n; i++)
+	{
+		for(int j = 0; j< n; j++)
+		{
+			cout<<" "<<cost[i][j]<<" ";
+		}
+		cout<<"\n";
+	}
 }
-
-int main() {
-
+void graph_prims:: prims()
+{
+	int nearest[MAX];
+	int mincost, start_vertex;
+	int min;  // Out of given edges, selects minimum edge
+	int r = 0;
+	int k;
+	int t[n][2];  // 1st column consists of the start vertices and the 2nd column consists of the end vertices
+	cout<<"Enter starting vertex\n";
+	cin>>start_vertex;
+	for(int i = 0; i < n ; i ++)
+	{
+		nearest[i] = start_vertex;
+	}
+	nearest[start_vertex] = -1;
+	mincost = 0;
+	for(int i = 0; i < n-1; i++)
+	{
+		min = INF;  // setting the minimum to
+		for(int j = 0; j< n; j++)
+		{
+			if(nearest[j] != -1 && cost[nearest[j]][j] < min)
+			{
+				k = j;
+				min = cost[nearest[j]][j];
+			}
+		}
+		// do it0
+		if(k != t[r][0])
+		{
+		t[r][0] = k;
+		t[r][1]=nearest[k];
+		// nearest keeps track of next vertex in
+		}
+		// do it
+		mincost = mincost + cost[k][nearest[k]];
+		nearest[k] =-1;
+		r++;
+		for(int j = 0; j < n; j++)
+		{
+			if(nearest[j] != -1 && cost[nearest[j]][j] > cost[j][k])
+			{
+				nearest[j] = k;   // Setting the nearest values of k
+			}
+		}
+	}
+	// Display
+	for(int i = 0; i < n-1; i++)
+	{
+		for(int j = 0; j< 2; j++)
+		{
+			cout<<" "<<t[i][j]<<" ";
+		}
+		cout<<"\n";
+	}
+	cout<<"Minimum cost: "<<mincost<<endl;
+}
+int main()
+{
+	int ch;
+	graph_prims t1;
+	while(1)
+	{
+		cout<<"1.Create 2.Display 3.Prims 4.Exit";
+		cin>> ch;
+		switch(ch)
+		{
+		case 1:
+			t1.create();
+			break;
+		case 2:
+			t1.display();
+			break;
+		case 3:
+			t1.prims();
+			break;
+		case 4:
+			cout<<"Thank You for your time!!\n";
+			exit(0);
+			break;
+		default:
+			cout<<"Enter valid input!!\n";
+			break;
+		}
+	}
+	return 0;
 }
