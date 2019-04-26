@@ -47,11 +47,6 @@ int main() {
 	for(i=0;i<nproc;i++) {
 		for(j=0;j<nres;j++) {
 			scanf("%d",&want[i][j]);
-
-			if(want[i][j] > res[j]) {
-				printf("\n Wrong input, claim overflow than total resources");
-				return 0;
-			}
 		}
 	}
 	
@@ -115,9 +110,10 @@ int main() {
 
 	printf("\n This is safe seq-\n");
 
-	for(i=0;i<nproc;i++) {
+	for(i=0;i<nproc-1;i++) {
 		printf(" P%d--> ",safe[i]);
 	}
+	printf(" P%d",safe[nproc-1]);
 	printf("\n");
 	return 0;
 }
