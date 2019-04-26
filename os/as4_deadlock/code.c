@@ -21,9 +21,10 @@ void displayMatrix(int sizer, int sizec, int matrix[max][max]) {
 
 int main() {
 	int nproc,nres;
-	int res[max],aval[max],work[max],finish[max];
+	int res[max],aval[max],work[max],finish[max],safe[max];
 	int want[max][max],alloc[max][max],need[max][max];
-	int i,j;
+	int i,j,k,y,ind=0;
+	int flag;
 
 	printf("Enter no. of resources- ");
 	scanf("%d",&nres);
@@ -42,7 +43,7 @@ int main() {
 		aval[j] = res[j];
 	}
 
-	printf("\n Enter want matrix-\n");
+	printf("\nEnter want matrix-\n");
 	for(i=0;i<nproc;i++) {
 		for(j=0;j<nres;j++) {
 			scanf("%d",&want[i][j]);
@@ -54,7 +55,7 @@ int main() {
 		}
 	}
 	
-	printf("\n Enter allocation matrix-\n");
+	printf("\nEnter allocation matrix-\n");
 	for(i=0;i<nproc;i++) {
 		for(j=0;j<nres;j++) {
 			scanf("%d",&alloc[i][j]);
@@ -62,7 +63,7 @@ int main() {
 		}
 	}
 	
-	printf("\n Calculating need matrix\n");
+	printf("\nCalculating need matrix\n");
 	for(i=0;i<nproc;i++) {
 		for(j=0;j<nres;j++) {
 			need[i][j] = want[i][j] - alloc[i][j];
@@ -89,5 +90,34 @@ int main() {
 	printf("\n Need matrix-\n");
 	displayMatrix(nproc,nres,need);
 
+	for(k=0;k<nproc;k++) {
+		for(i=0;i<nproc;i++) {
+			if(finish[i] == 0) {
+				flag=0;
+
+				for(j=0;j<nres;j++) {
+					if(need[i][j] > aval[j]) {
+						flag=1;
+						break;
+					}
+				}
+
+				if(flag == 0) {
+					safe[ind++] = i; //saving process index
+					for(y=0;y<nres;y++) {
+						aval[y] += alloc[i][y];
+					}
+					finish[i]=1;
+				}
+			}
+		}
+	}
+
+	printf("\n This is safe seq-\n");
+
+	for(i=0;i<nproc;i++) {
+		printf(" P%d--> ",safe[i]);
+	}
+	printf("\n");
 	return 0;
 }
