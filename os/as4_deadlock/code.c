@@ -1,119 +1,239 @@
 #include<stdio.h>
-#define max 10
+#include<stdlib.h>
+#define MAX 10
+int n,m,avail[MAX],max[MAX][MAX],alloc[MAX][MAX],need[MAX][MAX],finish[MAX];
 
-void displayVector(int size, int vector[max]) {
-	int i;
-	for(i=0;i<size;i++)
-		printf(" %d ",vector[i]);
-	printf("\n");
- }
-
-void displayMatrix(int sizer, int sizec, int matrix[max][max]) {
-	int i,j;
+void accept()
+{
 	
-	for(i=0;i<sizer;i++) {
-		for(j=0;j<sizec;j++) {
-			printf(" %d ", matrix[i][j]);
-		}
-		printf("\n");
+	int i,j,k;
+	printf("\nenter the no. of processes in system :\n");
+	scanf("%d",&n);	
+	printf("\nenter the no. of resources type in system :\n");
+	scanf("%d",&m);	
+	printf("\nenter the elements of available resources matrix :\n");
+	for(i=0;i<m;i++)
+	{
+		scanf("%d",&avail[i]);
+		//work[i]=avail[i];	
+	}
+
+	printf("\nenter the elements of allocation resources matrix :\n");
+	for(i=0;i<n;i++)
+	{
+	for(j=0;j<m;j++)
+	{
+		scanf("%d",&alloc[i][j]);	
+	}
+	}
+
+	printf("\nenter the elements of max resources matrix :\n");
+	for(i=0;i<n;i++)
+	{
+	for(j=0;j<m;j++)
+	{
+		scanf("%d",&max[i][j]);	
+		  /*if(max[i][j] > work[j])
+
+	      { printf(" error! Process cannot claim more than avilable!");
+
+	       exit(0);
+
+	      }*/
+
+	}
+	}
+
+	printf("Need Matrix :\n");
+	for(i=0;i<n;i++)
+	{
+	for(j=0;j<m;j++)
+	{
+		need[i][j]=max[i][j]-alloc[i][j];
+		printf("\t%d\t",need[i][j]);	
+		 /*if (need[i][j] < 0) 
+
+	     {                 
+
+	       printf(" Error! cannot allocate more than required ");
+
+	       exit(0);
+
+	     }
+
+	    avail[j] = avail[j]-alloc[i][j]; 
+
+	    if (avail[j] < 0) 
+
+	     {                
+
+	       printf("Error! Insufficient no of resources remaining");
+
+	       exit(0);
+
+	     }
+*/
+	}
+	printf("\n");
+	}
+	
+
+for(int i=0;i<n;i++)
+	{
+	finish[i]=0;	
 	}
 }
 
-int main() {
-	int nproc,nres;
-	int res[max],aval[max],work[max],finish[max],safe[max];
-	int want[max][max],alloc[max][max],need[max][max];
-	int i,j,k,y,ind=0;
-	int flag;
 
-	printf("Enter no. of resources- ");
-	scanf("%d",&nres);
 	
-	printf("\nEnter no. of proc- ");
-	scanf("%d",&nproc);
 	
-	for(i=0;i<nproc;i++) {
-		finish[i]=0;
+int total_vis;	
+int safety()
+{
+	int work[m],i,j,k=0,rem[k];
+	for(i=0;i<m;i++)
+	{
+		work[i]=avail[i];	
+	}
+	/*	
+	for(i=0;i<n;i++)
+	{
+		finish[i]=0;	
+	}*/
+	
+	int update;
+	total_vis=0;
+	do
+	{
+	update=0;
+	for(i=0;i<n;i++)
+	{int cn=0;
+	
+	for(j=0;j<m;j++)
+	{
+	if(finish[i]==0 && need[i][j]<=work[j])
+	{
+		//work[j]=work[j]+alloc[i][j];
+		cn++;
+		//finish[i]=1;
+	}
+	else 
+	{
+	break;		
 	}
 
-	printf("\nEnter resource vector-\n");
-	for(j=0;j<nres;j++) {
-		printf("\n\t for %d-",j);
-		scanf("%d",&res[j]);
-		aval[j] = res[j];
-	}
+	
 
-	printf("\nEnter want matrix-\n");
-	for(i=0;i<nproc;i++) {
-		for(j=0;j<nres;j++) {
-			scanf("%d",&want[i][j]);
+	}
+	if(cn==m)
+	{	
+		for(j=0;j<m;j++)
+		{
+		finish[i]=1;
+		work[j]=work[j]+alloc[i][j];		
 		}
+		printf("p%d->",i);	
+		update++;
+		total_vis++;
+	}
+	}
+	}while(update>0 && total_vis!=n); 
+	
+/*	if(finish[i]==1)
+	{
+	
+	}	
+*/	
+
+	if(total_vis==n-1)
+{
+		printf("\n\nThe processor is in Safe state\n");
+		printf("\n\n\t*********** Work Matrix ******* \n\n");
+		printf("Resource_No\tWork_Instances\n\n");
+
+		for(i=0;i<m;i++)
+		{
+		printf("R%d\t\t%d\n",i,work[i]);
+		}
+		printf("\n\n");
+}	
+if(total_vis<n-1)
+		printf("\n\nThe processor is in Unsafe state\n\n");
+	
+
+
+}
+
+void resource_request()
+{
+	int req[n][m];
+	int k,i,j,e,cn=0;
+	printf("\nenter the process which is doing resource request\n");
+	scanf("%d",&k);
+	printf("\nenter the requested matrix\n");
+	for(j=0;j<m;j++)
+	{
+	scanf("%d",&req[k][j]);
+	}
+
+	
+	for(j=0;j<m;j++)
+	{
+	if(req[k][j] > need[k][j])
+	{
+		printf("\nerror\n");
+		break;
+	}
+	else if(req[k][j] > avail[j])
+	{
+		printf("\nprocess should wait for sometime\n");
+		break;
+	}
+
+	else 
+//if(req[k][j] < need[k][j] && req[k][j] < avail[j])
+	{
+		cn++;
 	}
 	
-	printf("\nEnter allocation matrix-\n");
-	for(i=0;i<nproc;i++) {
-		for(j=0;j<nres;j++) {
-			scanf("%d",&alloc[i][j]);
-			aval[j] = aval[j] - alloc[i][j];
+
+	}
+	if(cn==m)
+	{
+		for(i=0;i<m;i++)
+		{
+		alloc[k][j] = alloc[k][j] + req[k][j];
+		avail[j] = avail[j] - req[k][j];
+		need[k][j] = need[k][j] - req[k][j];
+		}		
+		finish[k]=1;
+		safety();
+		if(total_vis!=n)
+		{
+		alloc[k][j] = alloc[k][j] - req[k][j];
+		avail[j] = avail[j] + req[k][j];
+		need[k][j] = need[k][j] + req[k][j];
 		}
+		
+	}
+	printf("\n Available Matrix\n\n");
+	for(i=0;i<m;i++)
+	{
+		printf("R%d\t%d\n",i,avail[i]);
 	}
 	
-	printf("\nCalculating need matrix\n");
-	for(i=0;i<nproc;i++) {
-		for(j=0;j<nres;j++) {
-			need[i][j] = want[i][j] - alloc[i][j];
-		}
-	}
+}
 
-	//ResourceVector
-	printf("\n Resource vector-\n");
-	displayVector(nres,res);
 
-	//NeedMAX Matrix
-	printf("\n Need matrix-\n");
-	displayMatrix(nproc,nres,want);
 
-	//Allocation Matrix
-	printf("\n Allocation matrix-\n");
-	displayMatrix(nproc,nres,alloc);
+int main()
+{
+	
+	accept();
+	safety();
+	resource_request();
 
-	//Available after allocation
-	printf("\n Available vector-\n");
-	displayVector(nres,aval);
 
-	//Need matrix C-A
-	printf("\n Need matrix-\n");
-	displayMatrix(nproc,nres,need);
 
-	for(k=0;k<nproc;k++) {
-		for(i=0;i<nproc;i++) {
-			if(finish[i] == 0) {
-				flag=0;
-
-				for(j=0;j<nres;j++) {
-					if(need[i][j] > aval[j]) {
-						flag=1;
-						break;
-					}
-				}
-
-				if(flag == 0) {
-					safe[ind++] = i; //saving process index
-					for(y=0;y<nres;y++) {
-						aval[y] += alloc[i][y];
-					}
-					finish[i]=1;
-				}
-			}
-		}
-	}
-
-	printf("\n This is safe seq-\n");
-
-	for(i=0;i<nproc-1;i++) {
-		printf(" P%d--> ",safe[i]);
-	}
-	printf(" P%d",safe[nproc-1]);
-	printf("\n");
 	return 0;
 }
