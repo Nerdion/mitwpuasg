@@ -15,9 +15,9 @@ def euclid(r1,r2):
 
 		r1 = r2
 		r2 = r
-
+		#print('q','r1','r2','t1','t2','t')
 		#print(q,r1,r2,r,t1,t2,t)
-	return t1
+	return t1,t2
 
 
 #accepting inputs
@@ -25,41 +25,33 @@ p = int(input("p-"))
 q = int(input("q-"))
 m = int(input("encryption value m-"))
 e = int(input("e- public key- "))
+
 n = p * q
+theta = (p - 1) * (q - 1)
+
+print("N- ",n)
+print("Theta(n)",theta)
 
 enc = None
 dec  = None
 x = None
 
-while True:
-	x = input("What you want to do? 1.Encryption 2.Decryption 3.Close")
+enc = (m**e) % n
+print("Encrypted C value is - ", enc)
 
-	if x == '1' :
-		enc = (m**e) % n
-		print("N- ",n)
-		print("Encrypted C value is - ", enc)
+tValue, t2 = euclid(theta,e)
 
-	elif x == '2' :
-		theta = (p - 1) * (q - 1)
-		print("N- ",n)
-		print("Theta(n)",theta)
-
-		tValue = euclid(theta,e)
-		print("t1-",tValue)
-
-		d = theta - (abs(tValue))
-		print("D- ", d)
-
-		dec = (enc**d) % n
-		print("Decrypted value is- ", dec)
-
-	elif x == '3':
-		print("End")
-		break
-	else:
-		print("Wrong choice")
+if tValue < 0:
+	d = theta - (abs(tValue))
+else:
+	d = t2 % (abs(tValue))
+print("t1-",tValue)
 
 
+print("D- ", d)
+
+dec = (enc**d) % n
+print("Decrypted value is- ", dec)
 
 
 
