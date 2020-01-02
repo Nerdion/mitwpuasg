@@ -1,6 +1,12 @@
 # Dr. Vishwanath Karad MIT - World Peace University
 # Computer Science and Engineering
 
+## Data Mining
+1. Data Cleaning
+2. OLAP tool
+3. Apriori Algorithm
+4. Decision Tree
+
 
 ## Data Structures - II	(.cpp)
 1. Polynomial Using Circular Linked List
