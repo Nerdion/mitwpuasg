@@ -1,6 +1,9 @@
 # Dr. Vishwanath Karad MIT - World Peace University
 # Computer Science and Engineering
 
+## IMLA (.ipynb)
+1. Lab 1 - EDA on CoronaVirus March Database
+
 ## Data Mining
 1. Data Cleaning
 2. OLAP tool
